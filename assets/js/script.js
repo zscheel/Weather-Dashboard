@@ -35,6 +35,57 @@ function futureWeather(lat, lon) {
 }
 
 
+function futureCards(data) {
+    for (i = 1; i < 6; i++) {
+        var date = getDateFuture(data, i);
+        var temp = data.daily[i].temp.day;
+        var wind = data.daily[i].wind_speed;
+        var icon = data.daily[i].weather[0].icon;
+        var humidity = data.daily[i].humidity;
+        var card = $("<div class='col rounded card-color m-3'> <h6 class='text-light'>" + date + "</h6> </div>");
+        var weatherIcon = $("<img class='max-width-20' src='http://openweathermap.org/img/wn/" + icon + "@2x.png'>");
+        var tempStat = $("<p class='text-light card-text'>Temp: " + temp + "°F</p>");
+        var windStat = $("<p class='text-light card-text'>Wind: " + wind + " MPH</p>");
+        var humidityStat = $("<p class='text-light card-text'>Humidity: " + humidity + " %</p>");
+
+        card.append(weatherIcon, tempStat, windStat, humidityStat);
+        weatherDisplay.append(card);
+    }
+
+}
+
+function createCurrentWeather(data) {
+    var temp = data.main.temp;
+    var humidity = data.main.humidity;
+    var wind = data.wind.speed;
+    var lat = data.coord.lat;
+    var lon = data.coord.lon;
+    var city = data.name;
+    addToStorage(city);
+    var card = $("<div class='col-lg-12 border'></div>")
+    var dataLog = $("<h1>" + city + " (" + getDate(data) + ")<img src='http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png'></h1>")
+    var dataLogging = $("<p>Temp: " + temp + "°F</p> <p>Wind: " + wind + "MPH</p> <p>Humidity: " + humidity +" %</p>");
+    card.append(dataLog);
+    card.append(dataLogging);
+
+    fetch("https://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon).then(function(response){
+        if(response.ok){
+            response.json().then(function(data){
+                var Uv = data.value;
+                if (Uv <= 2 ) {
+                    var UvIndex = $("<p>UV Index: <span class='p-2 bg-success rounded text-light'>" + Uv + "</span></p>");
+                } else if (Uv <= 5) {
+                    var UvIndex = $("<p>UV Index: <span class='p-2 bg-warning rounded'>" + Uv + "</span></p>");
+                } else {
+                    var UvIndex = $("<p>UV Index: <span class='p-2 bg-danger rounded text-light'>" + Uv + "</span></p>");
+                }
+                card.append(UvIndex);
+                weatherDisplay.append(card);
+            })
+        }
+    })
+}
+
 function addToStorage(parent) {
     for (i = 0; i < cityHistory.length; i ++) {
         var city = parent;
