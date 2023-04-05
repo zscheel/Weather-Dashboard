@@ -1,0 +1,20 @@
+img {
+    max-width: 50%;
+    height: auto;
+  }
+
+.weather-title {
+    background-image: linear-gradient(to bottom right, red, #00008B);
+}
+
+.card-color {
+    background-image: linear-gradient(to bottom right, orange, darkorange);
+}
+
+.card-text {
+    font-size: 15px;
+}
+
+.btn {
+    background-image: linear-gradient(to bottom right, white, #00008B);
+}
