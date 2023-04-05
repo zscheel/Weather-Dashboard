@@ -54,6 +54,21 @@ function futureCards(data) {
 
 }
 
+function getDateFuture(data, i) {
+    var unixTime = data.daily[i].dt;
+    var date = new Date(unixTime*1000);
+    var finalDate = date.toLocaleDateString("en-US");
+    return finalDate;
+}
+
+function getDate(data) {
+    var date = new Date(data.dt*1000+(data.timezone*1000));
+    var formatter = new Intl.DateTimeFormat('en-US', {timeZone: "America/Denver"});
+    var formattedDate = formatter.format(date);
+    console.log(formatter.format(date))
+    return formattedDate;
+}
+
 function createCurrentWeather(data) {
     var temp = data.main.temp;
     var humidity = data.main.humidity;
